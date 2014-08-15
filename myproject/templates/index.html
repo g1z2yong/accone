@@ -7,7 +7,7 @@
         <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
       </div>
 
-<FORM METHOD=POST ACTION="">
+
 	
 <div class="row">
   <div class="col-md-2">
@@ -33,31 +33,47 @@
 	</div>
 </div>
 <div class="row">
+<FORM METHOD=POST ACTION="/newnode">
   <div class="col-md-4">.
 	   <div class="input-group">
 	   <span class="input-group-addon">Chose</span>
-		<select class="form-control" id="account">
-			<option value="one">One</option>
-			<option value="two">Two</option>
-			<option value="three">Three</option>
-			<option value="four">Four</option>
-			<option value="five">Five</option>
+		<select class="form-control" id="account" name="naccid">
+			{% for a in acc %}
+				<option value="{{ a.aid }}">{{a.aid}} - {{ a.aname }}</option>
+			{% endfor %}
 		</select>
 		</div>
 	</div>
-  <div class="col-md-4">.
-	  <div class="input-group">
-	  <span class="input-group-addon">TT</span>
-	  <input type="text" class="form-control"	id="title">
-	    <span class="input-group-addon">
-		<input type="checkbox">
-      </span>
+  <div class="col-md-1">.
+
+		<div class="dropdown">
+		  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+			Input
+			<span class="caret"></span>
+		  </button>
+			<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu3">
+			  <li  id="selectme" role="presentation"><a role="menuitem" tabindex="-1" href="#">Select</a></li>
+			  <li  id="directinput" role="presentation"><a role="menuitem" tabindex="-1" href="#">Direct</a></li>
+			</ul>
+		</div>
 	</div>
+  <div class="col-md-3">.
+	  <div class="input-group">
+	  <input type="text" class="form-control"	id="title" name="nmessage">
+	  		<select class="form-control"    id="selectfromdb">
+			{% for a in message %}
+				<option value="{{a.message }}">{{a.message }}</option>
+			{% endfor %}
+		</select>
+	    <span class="input-group-addon"  >
+		<input type="checkbox" name="saveme" value="false" id="saveme">
+      </span>
+	  </div>
 	</div>
   <div class="col-md-2">.
 	  <div class="input-group">
 	  <span class="input-group-addon">$</span>
-	  <input type="text" class="form-control">
+	  <input type="text" class="form-control" name="nj" value=0.00>
 	  <span class="input-group-addon"></span>
 
 	</div>
@@ -65,19 +81,28 @@
 	  <div class="col-md-2">.
 		  <div class="input-group">
 		  <span class="input-group-addon">$</span>
-		  <input type="text" class="form-control" id="n2">
+		  <input type="text" class="form-control" name="nd" value=0.00>
 		  <span class="input-group-addon"></span>
 		</div>
 	</div>
 </div>
-<div class="row"  id="accall">
- 
-</div>
-<div class="row">
-  <div class="col-md-6">.col-md-6</div>
-  <div class="col-md-6">.col-md-6</div>
-</div>
+<INPUT TYPE="submit" value="Submit">
 </FORM>
+{% for node in nodeall %}
+<div class="row"  >
+	<div class="col-md-3">{{ node.naccid }}</div>
+	<div class="col-md-3">{{ node.nmessage }}</div>
+	<div class="col-md-3">{{ node.nj }}</div>
+	<div class="col-md-3">{{ node.nd }}</div>
+</div>
+{% endfor %}
+<div class="row">
+  <div class="col-md-3"> </div>
+  <div class="col-md-3"> </div>
+  <div class="col-md-3">{{ total.j }}</div>
+  <div class="col-md-3">{{ total.d }}</div>
+</div>
+
 
 <div class="input-group">
   <span class="input-group-addon">@</span>
@@ -107,6 +132,7 @@
 	<SCRIPT LANGUAGE="JavaScript">
 	<!--
 	$(document).ready(function(){
+		$("#selectfromdb").hide();
 		
 		$("#account").change(function(){
 			$("#accall").append('<div class="col-md-4">'+$("#account").val()+'</div>');
@@ -115,6 +141,21 @@
 			if (e.keyCode === 13) {
                alert("Enter was pressed was presses");
 			}
+		});
+		$("#selectme").click(function(e){
+				//alert("e");
+				$("#title").hide();
+				$("#title").attr('name','null');
+				$("#selectfromdb").show();
+				$("#selectfromdb").attr('name','nmessage');
+				$("#saveme").hide();
+		});
+		$("#directinput").click(function(e){
+				$("#title").show();
+				$("#title").attr('name','nmessage');
+				$("#selectfromdb").hide();
+				$("#selectfromdb").attr('name','null');
+				$("#saveme").show();
 		});
 	});
 		
